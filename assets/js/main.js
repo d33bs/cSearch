@@ -5,6 +5,7 @@ var cSearch = Backbone.View.extend({
 		$("#sq").focus();
 		this.resize();
 		$(window).on("resize",this.resize);
+                //site listing options
 		this.sites = {
 			"DuckDuckGo" : "http://duckduckgo.com/?q=",
     			"Ask.com" : "http://www.ask.com/web?q=",
@@ -50,15 +51,18 @@ var cSearch = Backbone.View.extend({
     "click #sq" : "focus_sq",
 			
 	},
+        //set the quadrants to their default sites
 	set_defaults : function(e){
 		this.quad = $.extend({},this.quad_defaults);
 		localStorage.setItem("search",JSON.stringify(this.quad));
 		this.set_selects();
 	},
+        //change the quandrant search site
 	quad_change : function(e){
 		this.quad[$(e.currentTarget).parent().attr("id").replace("s","")] = $(e.currentTarget).val();
 		localStorage.setItem("search",JSON.stringify(this.quad));
 	},
+        //open settings window
 	open_settings : function(e){
 		if(!this.settings_open){
 			this.close_info();
@@ -68,6 +72,7 @@ var cSearch = Backbone.View.extend({
 			this.close_settings();
 		}
 	},
+        //open info window
 	open_info : function(e){
 		if(!this.info_open){
 			this.close_settings();
@@ -77,25 +82,31 @@ var cSearch = Backbone.View.extend({
 			this.close_info();
 		}
 	},
+        //close settings window
 	close_settings : function(e){
 		$("#settings").hide();
 		this.settings_open = false;
 	},
+        //close info window
 	close_info : function(e){
 		$("#info").hide();
 		this.info_open = false;
 	},
+        //hover over settings button
     	hover_in_settings : function(e){
 		$(e.currentTarget).stop();
 		$(e.currentTarget).animate({color:"#eee"},"fast");	
 	},
+        //hover outside settings button
     	hover_out_settings : function(e){
 		$(e.currentTarget).stop();
 		$(e.currentTarget).animate({color:"#aaa"},"fast");		
 	},
+        //resize the display wrapper to correct proportions
     	resize : function(){
 		$("#displaywrap").css({"height":$("html").height()-(45)});
 	},
+        //on pressing enter perform the search query
 	search : function(e){
 		if(e.keyCode === 13){
 			this.clear();
@@ -107,6 +118,7 @@ var cSearch = Backbone.View.extend({
 			});
 		}
 	},
+        //clear the quadrant results to prepare for new content
 	clear : function(){
 		$.each($(".quadrant"),function(i,x){
 			if($(this).children("i").length<=0){
@@ -117,12 +129,14 @@ var cSearch = Backbone.View.extend({
 			}				
 		});
 	},
+        //load the src for the quadrant
 	ex_search : function(type,url){
 		$("#m"+type).attr("src",url);
 		$("#m"+type).load(function(){
 			$(this).parent().children("i").remove();
 		});
 	},
+        //set the current settings quadrant select boxes
 	set_selects : function(){
 		$("#settings .quad select").html("");
 		var view = this;
@@ -136,22 +150,27 @@ var cSearch = Backbone.View.extend({
 			});
 		});
 	},
+        //maximize a quadrant
 	maximize: function(e){
 		$(".quadrant").css({"width":"0","height":"0","display":"none"});		
 		$(e.currentTarget).parent().parent().css({"width":"100%","height":"100%","display":"block"});
 		$(e.currentTarget).parent().html("<i class=\"icon-resize-small\"></i>");
 	},
+        //minimize a quadrant
 	minimize : function(e){
 		$(".quadrant").css({"width":"50%","height":"50%","display":"block"});
 		$(e.currentTarget).parent().css("display","none");
 		$(e.currentTarget).parent().html("<i class=\"icon-resize-full\"></i>");
 	},
+        //hover inside a quadrant
 	hover_in_quad : function(e){
 		$(e.currentTarget).children(".window_control").css("display","block");
 	},
+        //hover outside a quadrant
 	hover_out_quad : function(e){
 		$(e.currentTarget).children(".window_control").css("display","none");
 	},
+        //focus in the top search query box and highlight the query
 	focus_sq : function(e){
     $(e.currentTarget).select();
 	}
